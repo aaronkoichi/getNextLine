@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/19 10:39:51 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/19 11:00:24 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*read_buffer(int fd)
 	return (result);
 }
 
-char	*ft_mk_buffer(char *buffer, char *result)
+static char	*ft_mk_buffer(char *buffer, char *result)
 {
 	int	result_s;
 	int	buf_len;
@@ -76,7 +76,7 @@ char	*ft_mk_buffer(char *buffer, char *result)
 	buffer = malloc((buf_len + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while (++i < buf_len)
+	while (++i < buf_len - 1)
 		buffer[i] = result[result_s + i + 1];
 	buffer[i] = '\0';
 	return (buffer);
@@ -100,11 +100,9 @@ char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*result;
-	char		*buf_remain;
 	char		*temp;
 
 	result = NULL;
-	buf_remain = NULL;
 	if (fd < 0)
 		return (NULL);
 	result = read_buffer(fd);

@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 13:25:52 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/19 08:34:06 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/19 10:49:55 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	char	*arr;
-	int		i;
+	size_t		i;
 
-	i = -1;
+	i = 0;
 	if (nmemb == 0 || size == 0)
 		return (malloc(0));
 	if (size > (size_t) -1 / nmemb)
@@ -77,8 +77,8 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	arr = malloc(nmemb * size);
 	if (!arr)
 		return (NULL);
-	while (++i < (nmemb * size))
-		arr[i] = 0;
+	while (i < (nmemb * size))
+		arr[i++] = 0;
 	return (arr);
 }
 
