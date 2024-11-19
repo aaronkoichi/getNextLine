@@ -5,88 +5,121 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 13:26:11 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/18 17:06:13 by zlee             ###   ########.fr       */
+/*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
+/*   Updated: 2024/11/19 10:39:51 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*create_buffer(char *buffer, size_t size)
+static char	*ft_spt_result(char *result)
 {
-	buffer = ft_calloc(size, sizeof(char));
+	int		result_s;
+	int		index;
+	char	*temp_result;
+
+	index = -1;
+	result_s= 0;
+	while (result[result_s] != '\n')
+		result_s++;
+	temp_result = ft_calloc(result_s + 2, sizeof(char));
+	if (!temp_result)
+		return (NULL);
+	while (++index < result_s + 1)
+		temp_result[index] = result[index];
+	free(result);
+	result = temp_result;
+	return (result);
+}
+
+static char	*read_buffer(int fd)
+{
+	char	*temp_buffer;
+	char	*result;
+	int		size;
+	char	*temp;
+
+	temp = NULL;
+	result = ft_calloc(1, 1);
+	if (!result)
+		return (NULL);
+	temp_buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!temp_buffer)
+		return (NULL);
+	size = read(fd, temp_buffer, BUFFER_SIZE);
+	while (size > 0)
+	{
+		temp = ft_strjoin(result, temp_buffer);
+		free(result);
+		result = temp;
+		temp_buffer = ft_bzero(temp_buffer, BUFFER_SIZE);
+		if (ft_strchr(result, '\n'))
+			break ;
+		size = read(fd, temp_buffer, BUFFER_SIZE);
+	}
+	free(temp_buffer);
+	return (result);
+}
+
+char	*ft_mk_buffer(char *buffer, char *result)
+{
+	int	result_s;
+	int	buf_len;
+	int	i;
+
+	i = -1;
+	buf_len = 0;
+	result_s = 0;
+	while (result[result_s] != '\n')
+		result_s++;
+	buf_len = ft_strlen(result) - result_s + 1;
+	buffer = malloc((buf_len + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	while (++i < buf_len)
+		buffer[i] = result[result_s + i + 1];
+	buffer[i] = '\0';
 	return (buffer);
 }
 
-static char	*trim_buf(char *buffer, int pos)
+static char	*ft_buf_prep(char **result, char **buffer)
 {
 	char	*temp;
-	int		i;
 
-	i = 0;
-	temp = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (*result == NULL)
+		*result = ft_calloc(1, 1);
+	temp = ft_strjoin(*buffer, *result);
 	if (!temp)
-		return (NULL);
-	while (buffer[pos] != '\0')
-		temp[i++] = buffer[pos++];
-	free(buffer);
+		return (*result);
+	free(*buffer);
+	free(*result);
 	return (temp);
-}
-
-static char	*trim_str(char *buffer, char *result)
-{
-	int		size;
-	int		i;
-	char	*temp_malloc;
-
-	size = 0;
-	i = -1;
-	while (buffer[size] != '\n')
-		size++;
-	if (size == 0 & buffer[size] != '\n')
-		return (NULL);
-	temp_malloc = ft_calloc(size + 2, sizeof(char));
-	while (++i <= size)
-		temp_malloc[i] = buffer[i];
-	temp_malloc[i] = '\0';
-	result = ft_strjoin(result, temp_malloc);
-	buffer = trim_buf(buffer, size);
-	free(temp_malloc);
-	return (result);
-}
-
-static char	*read_buffer(int fd, char *buffer)
-{
-	int		size;
-	char	*result;
-
-	result = ft_calloc(1, 1);
-	if (*buffer == '\0')
-		size = read(fd, buffer, BUFFER_SIZE);
-	while (!ft_strchr(buffer, '\n'))
-	{
-		if (size == 0)
-			break ;
-		result = ft_strjoin(result, buffer);
-		size = read(fd, buffer, BUFFER_SIZE);
-	}
-	if (ft_strchr(buffer, '\n'))
-		result = trim_str(buffer, result);
-	if (size == 0)
-		free(buffer);
-	return (result);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*result;
+	char		*buf_remain;
+	char		*temp;
 
 	result = NULL;
-	if (read(fd, 0, 0) < 1)
+	buf_remain = NULL;
+	if (fd < 0)
 		return (NULL);
-	if (!buffer)
-		buffer = create_buffer(buffer, BUFFER_SIZE + 1);
-	result = read_buffer(fd, buffer);
+	result = read_buffer(fd);
+	if (buffer)
+		result = ft_buf_prep(&result, &buffer);
+	if (*result == 0)
+	{
+		free(result);
+		return (NULL);
+	}
+	if (ft_strchr(result, '\n'))
+	{
+		buffer = ft_mk_buffer(buffer, result);
+		temp = ft_spt_result(result);
+		result = temp;
+	}
 	return (result);
 }

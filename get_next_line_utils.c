@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 13:25:52 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/18 13:50:00 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/19 08:34:06 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,20 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	while (++i < (nmemb * size))
 		arr[i] = 0;
 	return (arr);
+}
+
+void	*ft_bzero(void *s, size_t n)
+{
+	unsigned char	*initial;
+	size_t			count;
+
+	count = 0;
+	initial = s;
+	while (count < n)
+	{
+		*initial = '\0';
+		initial++;
+		count++;
+	}
+	return (s);
 }
