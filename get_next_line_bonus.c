@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/19 19:47:53 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/19 19:55:33 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*ft_spt_result(char *result)
 {
@@ -100,7 +100,7 @@ static char	*ft_buf_prep(char **result, char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[FD_SETSIZE];
 	char		*result;
 	char		*temp;
 
@@ -108,8 +108,8 @@ char	*get_next_line(int fd)
 	if (fd < 0)
 		return (NULL);
 	result = read_buffer(fd);
-	if (buffer != NULL)
-		result = ft_buf_prep(&result, &buffer);
+	if (buffer[fd] != NULL)
+		result = ft_buf_prep(&result, &buffer[fd]);
 	if (*result == 0)
 	{
 		free(result);
@@ -117,7 +117,7 @@ char	*get_next_line(int fd)
 	}
 	if (ft_strchr(result, '\n'))
 	{
-		buffer = ft_mk_buffer(buffer, result);
+		buffer[fd] = ft_mk_buffer(buffer[fd], result);
 		temp = ft_spt_result(result);
 		result = temp;
 	}
