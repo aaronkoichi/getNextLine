@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/19 19:55:33 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/19 20:10:23 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*ft_spt_result(char *result)
 	char	*temp_result;
 
 	index = -1;
-	result_s= 0;
+	result_s = 0;
 	while (result[result_s] != '\n')
 		result_s++;
 	temp_result = ft_calloc(result_s + 2, sizeof(char));
