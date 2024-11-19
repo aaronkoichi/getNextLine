@@ -6,11 +6,12 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/19 11:00:24 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/19 14:13:01 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 static char	*ft_spt_result(char *result)
 {
@@ -87,12 +88,14 @@ static char	*ft_buf_prep(char **result, char **buffer)
 	char	*temp;
 
 	if (*result == NULL)
-		*result = ft_calloc(1, 1);
+		return (*buffer);
 	temp = ft_strjoin(*buffer, *result);
 	if (!temp)
 		return (*result);
 	free(*buffer);
 	free(*result);
+	*result = temp;
+	*buffer = 0;
 	return (temp);
 }
 
@@ -106,7 +109,7 @@ char	*get_next_line(int fd)
 	if (fd < 0)
 		return (NULL);
 	result = read_buffer(fd);
-	if (buffer)
+	if (buffer != NULL)
 		result = ft_buf_prep(&result, &buffer);
 	if (*result == 0)
 	{
