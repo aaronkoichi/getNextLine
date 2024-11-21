@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/21 19:21:33 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/21 19:23:36 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*read_buffer(int fd)
 	result = ft_calloc(1, 1);
 	if (!result)
 		return (NULL);
-	temp_buffer = malloc(((BUFFER_SIZE + 1 ) * sizeof(char)));
+	temp_buffer = malloc(((BUFFER_SIZE + 1) * sizeof(char)));
 	if (!temp_buffer)
 		return (NULL);
 	size = read(fd, temp_buffer, BUFFER_SIZE);
