@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/22 17:06:49 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/22 22:08:47 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ static char	*ft_spt_result(char *result)
 	return (result);
 }
 
-static char	*read_buffer(int fd)
+static char	*read_buffer(int fd, char **result)
 {
 	char	*temp_buffer;
-	char	*result;
 	int		size;
 	char	*temp;
 
@@ -44,21 +43,18 @@ static char	*read_buffer(int fd)
 	if (!temp_buffer)
 		return (NULL);
 	size = read(fd, temp_buffer, BUFFER_SIZE);
-	result = ft_calloc(1, 1);
-	if (!result)
-		return (NULL);
 	while (size > 0)
 	{
 		temp_buffer[size] = 0;
-		temp = ft_strjoin(result, temp_buffer);
-		free(result);
-		result = temp;
-		if (ft_strchr(result, '\n'))
+		temp = ft_strjoin(*result, temp_buffer);
+		free(*result);
+		*result = temp;
+		if (ft_strchr(*result, '\n'))
 			break ;
 		size = read(fd, temp_buffer, BUFFER_SIZE);
 	}
 	free(temp_buffer);
-	return (result);
+	return (*result);
 }
 
 static char	*ft_mk_buffer(char *buffer, char *result)
@@ -104,10 +100,12 @@ char	*get_next_line(int fd)
 	char		*result;
 	char		*temp;
 
-	result = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	result = read_buffer(fd);
+	result = ft_calloc(1,1);
+	if (!result)
+		return (NULL);
+	read_buffer(fd, &result);
 	if (buffer != NULL)
 		result = ft_buf_prep(&result, &buffer);
 	if (!result || *result == 0)
