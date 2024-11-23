@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/22 22:08:47 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/23 23:49:08 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	result = ft_calloc(1,1);
+	result = ft_calloc(1, 1);
 	if (!result)
 		return (NULL);
 	read_buffer(fd, &result);
