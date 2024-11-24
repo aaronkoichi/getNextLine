@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/24 15:56:18 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/24 16:30:32 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static char	*ft_buf_prep(char **result, char **buffer)
 {
 	char	*temp;
 
-	if (*result == NULL || **result == 0)
+	if (*result == NULL)
 		return (*buffer);
 	temp = ft_strjoin(*buffer, *result);
 	if (!temp)
