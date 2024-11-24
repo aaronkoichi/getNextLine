@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/23 23:49:08 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/24 15:56:18 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*ft_spt_result(char *result)
 	return (result);
 }
 
-static char	*read_buffer(int fd, char **result)
+static void	read_buffer(int fd, char **result)
 {
 	char	*temp_buffer;
 	int		size;
@@ -41,7 +41,7 @@ static char	*read_buffer(int fd, char **result)
 	temp = NULL;
 	temp_buffer = malloc(((BUFFER_SIZE + 1) * sizeof(char)));
 	if (!temp_buffer)
-		return (NULL);
+		return ;
 	size = read(fd, temp_buffer, BUFFER_SIZE);
 	while (size > 0)
 	{
@@ -54,7 +54,6 @@ static char	*read_buffer(int fd, char **result)
 		size = read(fd, temp_buffer, BUFFER_SIZE);
 	}
 	free(temp_buffer);
-	return (*result);
 }
 
 static char	*ft_mk_buffer(char *buffer, char *result)
@@ -82,7 +81,7 @@ static char	*ft_buf_prep(char **result, char **buffer)
 {
 	char	*temp;
 
-	if (*result == NULL)
+	if (*result == NULL || **result == 0)
 		return (*buffer);
 	temp = ft_strjoin(*buffer, *result);
 	if (!temp)

@@ -6,7 +6,7 @@
 /*   By: zlee <zlee@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:48:44 by zlee              #+#    #+#             */
-/*   Updated: 2024/11/23 23:48:38 by zlee             ###   ########.fr       */
+/*   Updated: 2024/11/24 15:55:46 by zlee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,28 @@ static char	*ft_spt_result(char *result)
 	return (result);
 }
 
-static char	*read_buffer(int fd)
+static void	read_buffer(int fd, char **result)
 {
 	char	*temp_buffer;
-	char	*result;
 	int		size;
 	char	*temp;
 
 	temp = NULL;
-	temp_buffer = malloc((BUFFER_SIZE + 1 * sizeof(char)));
+	temp_buffer = malloc(((BUFFER_SIZE + 1) * sizeof(char)));
 	if (!temp_buffer)
-		return (NULL);
+		return ;
 	size = read(fd, temp_buffer, BUFFER_SIZE);
-	result = ft_calloc(1, 1);
-	if (!result)
-		return (NULL);
 	while (size > 0)
 	{
 		temp_buffer[size] = 0;
-		temp = ft_strjoin(result, temp_buffer);
-		free(result);
-		result = temp;
-		if (ft_strchr(result, '\n'))
+		temp = ft_strjoin(*result, temp_buffer);
+		free(*result);
+		*result = temp;
+		if (ft_strchr(*result, '\n'))
 			break ;
 		size = read(fd, temp_buffer, BUFFER_SIZE);
 	}
 	free(temp_buffer);
-	return (result);
 }
 
 static char	*ft_mk_buffer(char *buffer, char *result)
@@ -86,7 +81,7 @@ static char	*ft_buf_prep(char **result, char **buffer)
 {
 	char	*temp;
 
-	if (*result == NULL)
+	if (*result == NULL || **result == 0)
 		return (*buffer);
 	temp = ft_strjoin(*buffer, *result);
 	if (!temp)
@@ -105,9 +100,12 @@ char	*get_next_line(int fd)
 	char		*temp;
 
 	result = NULL;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	result = read_buffer(fd);
+	result = ft_calloc(1, 1);
+	if (!result)
+		return (NULL);
+	read_buffer(fd, &result);
 	if (buffer[fd] != NULL)
 		result = ft_buf_prep(&result, &buffer[fd]);
 	if (!result || *result == 0)
